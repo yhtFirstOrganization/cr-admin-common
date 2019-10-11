@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="04dba6f0-0143-4222-9d60-797d1eff4466" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -266,6 +265,7 @@
     <property name="project.structure.side.proportion" value="0.094711915" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="web.&#9;FILE&#9;file:///Users/yanghaotong/IdeaProjects/private/cr-admin-common/WebRoot/WEB-INF/web.xml&#10;index.ftl&#9;FILE&#9;file:///Users/yanghaotong/IdeaProjects/private/cr-admin-common/WebRoot/WEB-INF/ftl/index/index.ftl&#10;app&#9;FILE&#9;file:///Users/yanghaotong/IdeaProjects/private/cr-admin-common/classes/artifacts/cr_admin_common_Web2_exploded/WEB-INF/classes/applicationContext.xml&#10;BlockingQueuePool&#9;FILE&#9;file:///Users/yanghaotong/IdeaProjects/private/cr-admin-common/WebRoot/lib/Highcharts/4.1.7/exporting-server/java/highcharts-export/highcharts-export-convert/src/main/java/com/highcharts/export/pool/BlockingQueuePool.java&#10;svgConverter&#9;FILE&#9;jar:///Users/yanghaotong/IdeaProjects/private/cr-admin-common/WebRoot/lib/Highcharts/4.1.7/exporting-server/java/highcharts-export/highcharts-export-web/target/highcharts-export-web/WEB-INF/lib/highcharts-export-convert-2.1.0.jar!/com/highcharts/export/converter/SVGConverter.class&#10;ser&#9;PSI&#9;JAVA://com.crAdmin.module.index.service.IndexService" />
+    <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -472,12 +472,20 @@
       <workItem from="1523107615413" duration="37000" />
       <workItem from="1570778774905" duration="3786000" />
       <workItem from="1570787051476" duration="4496000" />
-      <workItem from="1570796595045" duration="52000" />
+      <workItem from="1570796595045" duration="91000" />
     </task>
+    <task id="LOCAL-00001" summary="提交忽略文件">
+      <created>1570796668670</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1570796668670</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15709000" />
+    <option name="totallyTimeSpent" value="15748000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="74" y="-1080" width="1920" height="1080" extended-state="6" />
@@ -553,6 +561,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="提交忽略文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="提交忽略文件" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
