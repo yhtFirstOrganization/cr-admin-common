@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crAdmin.module.repair.dao.RepairMapper">
+	<resultMap id="BaseResultMap" type="com.crAdmin.bean.Repair">
+		<id column="repair_id" property="repairId" jdbcType="INTEGER" />
+		<result column="car_id" property="carId" jdbcType="INTEGER" />
+		<result column="repair_num" property="repairNum" jdbcType="VARCHAR" />
+		<result column="repair_name" property="repairName" jdbcType="VARCHAR" />
+		<result column="service_adviser" property="serviceAdviser"
+			jdbcType="VARCHAR" />
+		<result column="repair_man" property="repairMan" jdbcType="VARCHAR" />
+		<result column="repair_time" property="repairTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="warranty_start_miles" property="warrantyStartMiles"
+			jdbcType="DECIMAL" />
+		<result column="repair_payment" property="repairPayment"
+			jdbcType="VARCHAR" />
+		<result column="repair_sum" property="repairSum" jdbcType="DECIMAL" />
+		<result column="repair_actual_sum" property="repairActualSum"
+			jdbcType="DECIMAL" />
+		<result column="isdelete" property="isdelete" jdbcType="VARCHAR" />
+		<result column="companyId" property="companyId" jdbcType="VARCHAR" />
+		<result column="other_bz" property="otherBz" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id repair_id, car_id, repair_num, repair_name,
+		service_adviser, repair_man,
+		repair_time, ifnull(warranty_start_miles,
+		0) warranty_start_miles, repair_payment,ifnull(repair_actual_sum, 0)
+		repair_actual_sum,
+		repair_sum, isdelete,update_time,companyId,other_bz
+	</sql>
+
+	<!-- 查询维修记录信息 -->
+	<select id="queryRepairInfo" resultMap="BaseResultMap"
+		parameterType="com.crAdmin.bean.Repair">
+		select id repair_id, car_id, repair_num, repair_name,
+		service_adviser, repair_man,update_time,
+		repair_time,
+		ifnull(warranty_start_miles, 0) warranty_start_miles, repair_payment,
+		repair_sum, isdelete, repair_actual_sum,companyId,other_bz
+		from tb_repair
+		where
+		id = #{repairId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryRepairList" resultMap="BaseResultMap"
+		parameterType="com.crAdmin.bean.Repair">
+		select
+		<include refid="Base_Column_List" />
+		from tb_repair
+		where 1 = 1
+		<if test="repairId != null">
+			and id = #{repairId,jdbcType=VARCHAR}
+		</if>
+		<if test="carId != null">
+			and car_id = #{carId,jdbcType=VARCHAR}
+		</if>
+		<if test="endTime != null">
+			and repair_time &lt;= #{endTime,jdbcType=VARCHAR}
+		</if>
+		<if test="startTime != null">
+			and repair_time &gt;= #{startTime,jdbcType=VARCHAR}
+		</if>
+		<if test="companyId != null">
+			and companyId = #{companyId,jdbcType=VARCHAR}
+		</if>
+		and ifnull(isdelete,'0') = '0'
+		order by repair_time desc
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_repair
+		where id = #{repairId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.crAdmin.bean.Repair">
+		insert into tb_repair (id,
+		car_id, repair_num,
+		repair_name, service_adviser, repair_man,
+		repair_time, repair_payment, repair_sum,
+		isdelete,update_time,companyId)
+		values
+		(#{repairId,jdbcType=INTEGER}, #{carId,jdbcType=INTEGER},
+		#{repairNum,jdbcType=VARCHAR},
+		#{repairName,jdbcType=VARCHAR},
+		#{serviceAdviser,jdbcType=VARCHAR}, #{repairMan,jdbcType=VARCHAR},
+		#{repairTime,jdbcType=TIMESTAMP}, #{repairPayment,jdbcType=VARCHAR},
+		#{repairSum,jdbcType=DECIMAL},
+		#{companyId,jdbcType=DECIMAL},
+		#{isdelete,jdbcType=VARCHAR},now())
+	</insert>
+
+	<!-- 新增维修记录信息 -->
+	<insert id="addRepairInfo" parameterType="com.crAdmin.bean.Repair"
+		useGeneratedKeys="true" keyProperty="repairId">
+		insert into tb_repair
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="repairId != null">
+				id,
+			</if>
+			<if test="carId != null">
+				car_id,
+			</if>
+			<if test="repairNum != null">
+				repair_num,
+			</if>
+			<if test="repairName != null">
+				repair_name,
+			</if>
+			<if test="serviceAdviser != null">
+				service_adviser,
+			</if>
+			<if test="repairMan != null">
+				repair_man,
+			</if>
+			<if test="repairTime != null">
+				repair_time,
+			</if>
+			<if test="warrantyStartMiles != null">
+				warranty_start_miles,
+			</if>
+			<if test="repairPayment != null">
+				repair_payment,
+			</if>
+			<if test="repairSum != null">
+				repair_sum,
+			</if>
+			<if test="repairActualSum != null">
+				repair_actual_sum,
+			</if>
+			<if test="isdelete != null">
+				isdelete,
+			</if>
+			<if test="companyId != null">
+				companyId,
+			</if>
+			<if test="otherBz != null">
+				other_bz,
+			</if>
+			update_time
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="repairId != null">
+				#{repairId,jdbcType=INTEGER},
+			</if>
+			<if test="carId != null">
+				#{carId,jdbcType=INTEGER},
+			</if>
+			<if test="repairNum != null">
+				#{repairNum,jdbcType=VARCHAR},
+			</if>
+			<if test="repairName != null">
+				#{repairName,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceAdviser != null">
+				#{serviceAdviser,jdbcType=VARCHAR},
+			</if>
+			<if test="repairMan != null">
+				#{repairMan,jdbcType=VARCHAR},
+			</if>
+			<if test="repairTime != null">
+				#{repairTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="warrantyStartMiles != null">
+				#{warrantyStartMiles,jdbcType=DECIMAL},
+			</if>
+			<if test="repairPayment != null">
+				#{repairPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="repairSum != null">
+				#{repairSum,jdbcType=DECIMAL},
+			</if>
+			<if test="repairActualSum != null">
+				#{repairActualSum,jdbcType=DECIMAL},
+			</if>
+			<if test="isdelete != null">
+				#{isdelete,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="otherBz != null">
+				#{otherBz,jdbcType=VARCHAR},
+			</if>
+			now()
+		</trim>
+	</insert>
+
+	<!-- 修改维修记录信息 -->
+	<update id="updateRepairInfo" parameterType="com.crAdmin.bean.Repair">
+		update tb_repair
+		<set>
+			<if test="carId != null">
+				car_id = #{carId,jdbcType=INTEGER},
+			</if>
+			<if test="repairNum != null">
+				repair_num = #{repairNum,jdbcType=VARCHAR},
+			</if>
+			<if test="repairName != null">
+				repair_name = #{repairName,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceAdviser != null">
+				service_adviser = #{serviceAdviser,jdbcType=VARCHAR},
+			</if>
+			<if test="repairMan != null">
+				repair_man = #{repairMan,jdbcType=VARCHAR},
+			</if>
+			<if test="repairTime != null">
+				repair_time = #{repairTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="warrantyStartMiles != null">
+				warranty_start_miles =
+				#{warrantyStartMiles,jdbcType=DECIMAL},
+			</if>
+			<if test="repairPayment != null">
+				repair_payment = #{repairPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="repairSum != null">
+				repair_sum = #{repairSum,jdbcType=DECIMAL},
+			</if>
+			<if test="repairActualSum != null">
+				repair_actual_sum = #{repairActualSum,jdbcType=DECIMAL},
+			</if>
+			<if test="isdelete != null">
+				isdelete = #{isdelete,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				companyId = #{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="otherBz != null">
+				other_bz = #{otherBz,jdbcType=VARCHAR},
+			</if>
+			update_time = now()
+		</set>
+		where id = #{repairId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.crAdmin.bean.Repair">
+		update tb_repair
+		set car_id = #{carId,jdbcType=INTEGER},
+		repair_num =
+		#{repairNum,jdbcType=VARCHAR},
+		repair_name =
+		#{repairName,jdbcType=VARCHAR},
+		service_adviser =
+		#{serviceAdviser,jdbcType=VARCHAR},
+		repair_man =
+		#{repairMan,jdbcType=VARCHAR},
+		repair_time =
+		#{repairTime,jdbcType=TIMESTAMP},
+		repair_payment =
+		#{repairPayment,jdbcType=VARCHAR},
+		repair_sum =
+		#{repairSum,jdbcType=DECIMAL},
+		isdelete = #{isdelete,jdbcType=VARCHAR},
+		companyId = #{companyId,jdbcType=VARCHAR},
+		update_time = now()
+		where id = #{repairId,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除维修记录 -->
+	<update id="delRepairInfo" parameterType="com.crAdmin.bean.Repair">
+		update tb_repair
+		set
+		isdelete='1'
+		where id = #{repairId,jdbcType=INTEGER}
+	</update>
+
+</mapper>

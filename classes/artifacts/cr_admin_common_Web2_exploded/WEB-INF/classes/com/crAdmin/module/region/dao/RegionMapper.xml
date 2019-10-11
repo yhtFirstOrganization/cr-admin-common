@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crAdmin.module.region.dao.RegionMapper">
+	<resultMap id="BaseResultMap" type="com.crAdmin.bean.Region">
+		<id column="region_id" property="regionId" jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="pname" property="pname" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="ptree" property="ptree" jdbcType="LONGVARCHAR" />
+		<result column="pname_tree" property="pnameTree" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id region_id, pid, name, pname, status, ptree, pname_tree
+	</sql>
+	
+	<!-- 根据父id获取列表 -->
+	<select id="getChildList" resultMap="BaseResultMap"
+		parameterType="com.crAdmin.bean.Region">
+		select id region_id, pid, name, pname, status, ptree, pname_tree
+		  from tb_region
+		 where pid = #{regionId,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据id获取对象 -->
+	<select id="find" resultMap="BaseResultMap"
+		parameterType="com.crAdmin.bean.Region">
+		select id region_id, pid, name, pname, status, ptree, pname_tree
+		  from tb_region
+		 where id = #{regionId,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="com.crAdmin.bean.Region">
+		delete from tb_region
+		 where id = #{regionId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.crAdmin.bean.Region">
+		insert into tb_region 
+		       (id, pid, name, pname, status, 
+		       ptree, pname_tree)
+		values (#{regionId,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR},
+		       #{name,jdbcType=VARCHAR}, #{pname,jdbcType=VARCHAR},
+		       #{status,jdbcType=INTEGER}, #{ptree,jdbcType=LONGVARCHAR},
+		       #{pnameTree,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.crAdmin.bean.Region">
+		insert into tb_region
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="regionId != null">
+				id,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="pname != null">
+				pname,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="ptree != null">
+				ptree,
+			</if>
+			<if test="pnameTree != null">
+				pname_tree,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="regionId != null">
+				#{regionId,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="pname != null">
+				#{pname,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="ptree != null">
+				#{ptree,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pnameTree != null">
+				#{pnameTree,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.crAdmin.bean.Region">
+		update tb_region
+		<set>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="pname != null">
+				pname = #{pname,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="ptree != null">
+				ptree = #{ptree,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pnameTree != null">
+				pname_tree = #{pnameTree,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{regionId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.crAdmin.bean.Region">
+		update tb_region
+		   set pid = #{pid,jdbcType=VARCHAR},
+		       name = #{name,jdbcType=VARCHAR},
+		       pname = #{pname,jdbcType=VARCHAR},
+		       status = #{status,jdbcType=INTEGER},
+		       ptree = #{ptree,jdbcType=LONGVARCHAR},
+		       pname_tree = #{pnameTree,jdbcType=LONGVARCHAR}
+		 where id = #{regionId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.crAdmin.bean.Region">
+		update tb_region
+		       set pid = #{pid,jdbcType=VARCHAR},
+		       name = #{name,jdbcType=VARCHAR},
+		       pname = #{pname,jdbcType=VARCHAR},
+		       status = #{status,jdbcType=INTEGER}
+		where id = #{regionId,jdbcType=VARCHAR}
+	</update>
+</mapper>

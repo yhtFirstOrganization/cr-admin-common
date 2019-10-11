@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="highcharts-export-convert">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WebRoot/lib/Highcharts/4.1.7/exporting-server/java/highcharts-export/highcharts-export-convert/target/highcharts-export-convert.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

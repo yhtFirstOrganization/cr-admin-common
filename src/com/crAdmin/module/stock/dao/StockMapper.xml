@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crAdmin.module.stock.dao.StockMapper">
+	<resultMap id="BaseResultMap" type="com.crAdmin.bean.Stock">
+		<id column="id" property="stockId" jdbcType="INTEGER" />
+		<result column="stock_no" property="stockNo" jdbcType="VARCHAR" />
+		<result column="stock_price" property="stockPrice" jdbcType="DECIMAL" />
+		<result column="stock_price_income" property="stockPriceIncome"
+			jdbcType="DECIMAL" />
+		<result column="stock_quantity" property="stockQuantity"
+			jdbcType="DECIMAL" />
+		<result column="stock_unit" property="stockUnit" jdbcType="VARCHAR" />
+		<result column="work_hours_cost" property="workHoursCost"
+			jdbcType="DECIMAL" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="isdelete" property="isdelete" jdbcType="VARCHAR" />
+		<result column="supplier" property="supplier" jdbcType="VARCHAR" />
+		<result column="supplier_tel" property="supplierTel" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithBLOBs" type="com.crAdmin.bean.Stock"
+		extends="BaseResultMap">
+		<result column="stock_des" property="stockDes" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="OutStockInfo" type="com.crAdmin.bean.vo.OutStockVo">
+		<id column="stock_id" property="stockId" jdbcType="INTEGER" />
+		<result column="stock_no" property="stockNo" jdbcType="VARCHAR" />
+		<result column="stock_des" property="stockName" jdbcType="VARCHAR" />
+		<result column="carid" property="carId" jdbcType="DECIMAL" />
+		<result column="license_plate_num" property="license_plate_num"
+			jdbcType="DECIMAL" />
+		<result column="quantity" property="userdStockQuantity"
+			jdbcType="DECIMAL" />
+		<result column="stock_quantity" property="stockQuantity"
+			jdbcType="DECIMAL" />
+		<result column="repairCount" property="repairCount" jdbcType="DECIMAL" />
+		<result column="cost" property="cost" jdbcType="DECIMAL" />
+		<result column="stock_price_income" property="stockIncomePrice"
+			jdbcType="DECIMAL" />
+		<result column="stockCount" property="stockCount" jdbcType="DECIMAL" />
+		<result column="work_hours_cost" property="workHourCost"
+			jdbcType="DECIMAL" />
+		<result column="price" property="itemSum" jdbcType="DECIMAL" />
+		<result column="stockCost" property="stockCost" jdbcType="DECIMAL" />
+		<result column="supplier" property="supplier" jdbcType="VARCHAR" />
+		<result column="supplier_tel" property="supplierTel" jdbcType="VARCHAR" />
+		<result column="income_time" property="incomingTime" jdbcType="TIMESTAMP" />
+		<result column="incomingTimeStr" property="incomingTimeStr" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, stock_no,stock_des, stock_price, stock_price_income,
+		stock_quantity,
+		stock_unit,
+		work_hours_cost,
+		create_time,
+		update_time,
+		isdelete,companyId,supplier,supplier_tel
+	</sql>
+	<select id="queryStockList" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_stock
+		where isdelete=0
+		<if test="stockId != null">
+			and id <![CDATA[<>]]>
+			#{stockId,jdbcType=INTEGER}
+		</if>
+		<if test="companyId != null">
+			and companyId = #{companyId,jdbcType=INTEGER}
+		</if>
+		<if test="stockNo != null">
+			and stock_no = #{stockNo,jdbcType=INTEGER}
+		</if>
+		<if test="isdelete != null">
+			and ifnull(isdelete, '0') = #{isdelete,jdbcType=VARCHAR}
+		</if>
+		order by create_time desc
+	</select>
+	<select id="queryStockInfo" resultMap="ResultMapWithBLOBs"
+		parameterType="com.crAdmin.bean.Stock">
+		select
+		<include refid="Base_Column_List" />
+		from tb_stock
+		where id = #{stockId,jdbcType=INTEGER}
+		<if test="isdelete != null">
+			and ifnull(isdelete, '1') = #{isdelete,jdbcType=VARCHAR}
+		</if>
+		<if test="companyId != null">
+			and companyId = #{companyId,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="queryOutStockItemInfo" resultMap="OutStockInfo"
+		parameterType="com.crAdmin.bean.vo.OutStockVo">
+		SELECT a.id stock_id,
+		a.stock_no, d.id carid, d.license_plate_num,
+		sum(b.item_quantity) quantity,
+		SUM(a.work_hours_cost*b.item_quantity)
+		work_hours_cost,
+		count(b.id) repairCount,
+		sum(a.stock_price_income*b.item_quantity) cost,
+		sum(b.item_quantity *
+		a.stock_price) price
+		FROM tb_stock
+		a,tb_repair_item
+		b,tb_repair
+		c,tb_car d
+		WHERE b.stock_id = a.id and
+		b.isdelete='0'
+		and a.isdelete='0'
+		and
+		c.isdelete='0'
+		and d.isdelete='0'
+		AND b.repair_id = c.id
+		AND c.car_id = d.id
+		<if test="companyId != null">
+			and a.companyId = #{companyId,jdbcType=INTEGER}
+		</if>
+		<if test="endTime != null">
+			and c.repair_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="startTime != null">
+			and c.repair_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="stockId != null">
+			and a.id = #{stockId,jdbcType=INTEGER}
+		</if>
+		GROUP BY
+		a.id,a.stock_no,a.stock_des,
+		d.id,d.license_plate_num;
+	</select>
+
+	<!-- 查询库存出库列表 -->
+	<select id="getOutStockList" resultMap="OutStockInfo"
+		parameterType="com.crAdmin.bean.vo.OutStockVo">
+		SELECT a.id stock_id, a.stock_des,
+		a.stock_no,a.stock_price_income,a.stock_quantity,
+		(a.stock_quantity*a.stock_price_income) stockCost,
+		sum(b.item_quantity)
+		quantity,
+		SUM(a.work_hours_cost*b.item_quantity)
+		work_hours_cost,
+		sum(b.item_quantity *a.stock_price_income) cost,
+		sum(b.item_quantity *
+		a.stock_price) price
+		FROM tb_stock
+		a,tb_repair_item b,tb_repair c
+		WHERE
+		a.id = b.stock_id
+		and a.isdelete='0'
+		and b.isdelete='0'
+		and c.isdelete='0'
+		<if test="companyId != null">
+			and a.companyId = #{companyId,jdbcType=INTEGER}
+		</if>
+		<if test="endTime != null">
+			and c.repair_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="startTime != null">
+			and c.repair_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+		</if>
+		and b.repair_id=c.id
+		GROUP BY
+		a.id,a.stock_des,a.stock_no,a.stock_price;
+	</select>
+	<!-- 查询库存进货列表 -->
+	<select id="getComingStockList" resultMap="OutStockInfo"
+		parameterType="com.crAdmin.bean.vo.OutStockVo">
+		SELECT a.id stock_id, a.stock_no, a.stock_des, COUNT(b.id) stockCount,
+		sum(b.income_stock_quantity) stock_quantity,a.supplier,	a.supplier_tel,
+		sum(a.stock_price) cost
+		FROM tb_stock a,tb_stock_income b
+		WHERE b.isdelete = '0' AND a.isdelete ='0'
+		<if test="companyId != null">
+			and a.companyId = #{companyId,jdbcType=INTEGER}
+		</if>
+		AND a.id = b.stock_id
+		<if test="endTime != null">
+			and b.income_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="startTime != null">
+			and b.income_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+		</if>
+		GROUP BY	a.id,	a.stock_no,	a.stock_des;
+
+	</select>
+	
+	
+	<!-- 查询库存进货列表 -->
+	<select id="getIncomeItemStock" resultMap="OutStockInfo"
+		parameterType="com.crAdmin.bean.vo.OutStockVo">
+		SELECT	a.stock_id,	b.stock_no,	b.stock_des,a.supplier,	a.supplier_tel,
+		a.income_stock_quantity stock_quantity,b.stock_price_income stock_price_income,DATE_FORMAT(a.income_time,'%Y-%m-%d') incomingTimeStr 
+		FROM	tb_stock_income a,	tb_stock b
+		WHERE a.stock_id = b.id AND a.isdelete='0' and b.isdelete='0' 
+		<if test="companyId != null">
+			and b.companyId = #{companyId,jdbcType=INTEGER}
+		</if>
+		<if test="stockId != null">
+			and a.stock_id = #{stockId,jdbcType=INTEGER}
+		</if>
+		<if test="endTime != null">
+			and a.income_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="startTime != null">
+			and a.income_time &gt;= #{startTime,jdbcType=TIMESTAMP}
+		</if>
+	</select>
+
+
+	<delete id="delStockInfo" parameterType="java.lang.Integer">
+		update tb_stock
+		set
+		isdelete = '1'
+		where id = #{stockId,jdbcType=INTEGER}
+	</delete>
+	<insert id="addStockInfo" parameterType="com.crAdmin.bean.Stock">
+		insert into tb_stock
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="stockNo != null">
+				stock_no,
+			</if>
+			<if test="stockPrice != null">
+				stock_price,
+			</if>
+			<if test="stockPriceIncome != null">
+				stock_price_income,
+			</if>
+			<if test="stockQuantity != null">
+				stock_quantity,
+			</if>
+			<if test="stockUnit != null">
+				stock_unit,
+			</if>
+			<if test="workHoursCost != null">
+				work_hours_cost,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="isdelete != null">
+				isdelete,
+			</if>
+			<if test="stockDes != null">
+				stock_des,
+			</if>
+			<if test="companyId != null">
+				companyId,
+			</if>
+			<if test="supplier != null">
+				supplier,
+			</if>
+			<if test="supplierTel != null">
+				supplier_tel,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="stockNo != null">
+				#{stockNo,jdbcType=VARCHAR},
+			</if>
+			<if test="stockPrice != null">
+				#{stockPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="stockPriceIncome != null">
+				#{stockPriceIncome,jdbcType=DECIMAL},
+			</if>
+			<if test="stockQuantity != null">
+				#{stockQuantity,jdbcType=DECIMAL},
+			</if>
+			<if test="stockUnit != null">
+				#{stockUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="workHoursCost != null">
+				#{workHoursCost,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isdelete != null">
+				#{isdelete,jdbcType=VARCHAR},
+			</if>
+			<if test="stockDes != null">
+				#{stockDes,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="supplier != null">
+				#{supplier,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierTel != null">
+				#{supplierTel,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateStockInfo" parameterType="com.crAdmin.bean.Stock">
+		update tb_stock
+		<set>
+			<if test="stockNo != null">
+				stock_no = #{stockNo,jdbcType=VARCHAR},
+			</if>
+			<if test="stockPrice != null">
+				stock_price = #{stockPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="stockPriceIncome != null">
+				stock_price_income =
+				#{stockPriceIncome,jdbcType=DECIMAL},
+			</if>
+			<if test="stockQuantity != null">
+				stock_quantity = #{stockQuantity,jdbcType=DECIMAL},
+			</if>
+			<if test="stockUnit != null">
+				stock_unit = #{stockUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="workHoursCost != null">
+				work_hours_cost = #{workHoursCost,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isdelete != null">
+				isdelete = #{isdelete,jdbcType=VARCHAR},
+			</if>
+			<if test="stockDes != null">
+				stock_des = #{stockDes,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null">
+				companyId=#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="supplier != null">
+				supplier=#{supplier,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierTel != null">
+				supplier_tel=#{supplierTel,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{stockId,jdbcType=INTEGER}
+	</update>
+	<update id="updateStockInfoByUsed" parameterType="com.crAdmin.bean.Stock">
+		update tb_stock
+		<set>
+			<if test="stockQuantity != null">
+				stock_quantity = stock_quantity -
+				#{stockQuantity,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="companyId != null">
+				companyId=#{companyId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{stockId,jdbcType=INTEGER}
+	</update>
+</mapper>
