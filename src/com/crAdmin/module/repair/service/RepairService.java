@@ -1,15 +1,5 @@
 package com.crAdmin.module.repair.service;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.crAdmin.bean.Car;
 import com.crAdmin.bean.Repair;
 import com.crAdmin.bean.RepairItem;
@@ -18,10 +8,18 @@ import com.crAdmin.module.repair.dao.RepairMapper;
 import com.crAdmin.module.repairItem.service.RepairItemService;
 import com.crAdmin.util.BaseController;
 import com.crAdmin.util.Util;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 维修记录相关service
- * 
+ *
  * @ClassName: RepairService
  * @Description:
  * @author 桑越
@@ -40,7 +38,7 @@ public class RepairService {
 
 	/**
 	 * 获取维修记录列表
-	 * 
+	 *
 	 * @Title: queryRepairList
 	 * @Description:
 	 * @author 桑越
@@ -57,7 +55,7 @@ public class RepairService {
 
 	/**
 	 * 查询维修记录信息
-	 * 
+	 *
 	 * @Title: queryRepairInfo
 	 * @Description:
 	 * @author 桑越
@@ -74,7 +72,7 @@ public class RepairService {
 
 	/**
 	 * 修改维修记录信息
-	 * 
+	 *
 	 * @Title: updateRepairInfo
 	 * @Description:
 	 * @author 桑越
@@ -91,7 +89,7 @@ public class RepairService {
 
 	/**
 	 * 新增维修记录信息
-	 * 
+	 *
 	 * @Title: addRepairInfo
 	 * @Description:
 	 * @author 桑越
@@ -108,7 +106,7 @@ public class RepairService {
 
 	/**
 	 * 新增维修记录和项目信息
-	 * 
+	 *
 	 * @Title: addRepairAndItem
 	 * @Description:
 	 * @author 桑越
@@ -188,7 +186,7 @@ public class RepairService {
 
 	/**
 	 * 修改维修记录和项目信息
-	 * 
+	 *
 	 * @param repair
 	 * @return
 	 */
@@ -261,7 +259,7 @@ public class RepairService {
 
 	/**
 	 * 新增维修项目列表信息
-	 * 
+	 *
 	 * @param repair
 	 * @return
 	 */
@@ -309,7 +307,7 @@ public class RepairService {
 
 	/**
 	 * 删除维修记录
-	 * 
+	 *
 	 * @param repair
 	 * @return
 	 * @version V1.1桑越2015年12月19日 修改删除维修记录的相关
@@ -342,4 +340,43 @@ public class RepairService {
 		return returnMap;
 	}
 
+    /**
+     * 根据ID获取维修列表
+     *
+     * @param idList
+     * @return java.util.List<com.crAdmin.bean.Repair>
+     * @author wangshiyao02
+     * @date 2019/11/24 3:55 PM
+     */
+    public List<Repair> queryRepairListByIds(List<Integer> idList) {
+        if (CollectionUtils.isEmpty(idList)) {
+            return Collections.emptyList();
+        }
+        return repairMapper.queryRepairListByIds(idList);
+    }
+
+    /**
+     * 根据ID获取维修列表
+     *
+     * @param repairIds
+     * @return java.util.List<com.crAdmin.bean.Repair>
+     * @author wangshiyao02
+     * @date 2019/11/24 4:06 PM
+     */
+    public List<Repair> queryRepairListByIds(String repairIds) {
+        if (StringUtils.isBlank(repairIds)) {
+            return Collections.emptyList();
+        }
+
+        String[] idArray = repairIds.split(",");
+        List<Integer> idList = new ArrayList<>();
+        for (String idStr : idArray) {
+            if (StringUtils.isBlank(idStr)) {
+                continue;
+            }
+            idList.add(Integer.parseInt(idStr));
+        }
+
+        return queryRepairListByIds(idList);
+    }
 }

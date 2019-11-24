@@ -45,8 +45,9 @@
 					<input type="text" class="input-text Wdate" value="" placeholder="" id="endTime" name="endTime"
 						onfocus="WdatePicker({maxDate:'%y-%M-%d %H:%m:%s',dateFmt:'yyyy-MM-dd HH:mm:ss'})" datatype="*"/>
 				</div>
+                <input type="text" name="repairIds" id="repairIds" class="form-control" style="display:none;" value=${repairIds!""}>
 			</div>
-			
+
 		</div>
 		<div>
 			<ul id="repairListUl" class="Huifold">

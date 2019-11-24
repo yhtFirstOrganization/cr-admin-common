@@ -82,6 +82,7 @@
 									<th width="70" id="stockIncomePrice">总库存成本</th>
 									<th width="70" id="workHourCost">总工时费成本</th>
 									<th width="50" id="workHoursCost">收入</th>
+									<th width="50" id="repairIds" style="display:none;">维修记录id列表</th>
 									<th width="80">操作</th>
 								</tr>
 							</thead>

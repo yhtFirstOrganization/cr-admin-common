@@ -267,4 +267,17 @@
 		where id = #{repairId,jdbcType=INTEGER}
 	</update>
 
+	<select id="queryRepairListByIds" resultMap="BaseResultMap" parameterType="com.crAdmin.bean.Repair">
+		select
+		<include refid="Base_Column_List" />
+		from tb_repair
+		where 1 = 1
+		and id IN
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+		and ifnull(isdelete,'0') = '0'
+		order by repair_time desc
+	</select>
+
 </mapper>

@@ -4,6 +4,7 @@ logs
 .project
 .classpath
 .settings
+*.class
 */target
 */.settings
 */.classpath

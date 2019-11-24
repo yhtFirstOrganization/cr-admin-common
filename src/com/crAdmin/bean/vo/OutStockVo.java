@@ -41,6 +41,7 @@ public class OutStockVo {
 	private Date endTime;//维修时间
 	private BigDecimal stockCount;//进货次数
 	private String incomingTimeStr;
+	private String repairIds;//对应的维修记录列表
 
 	public Integer getRepairItemId() {
 		return repairItemId;
@@ -266,5 +267,47 @@ public class OutStockVo {
 	public void setIncomingTimeStr(String incomingTimeStr) {
 		this.incomingTimeStr = incomingTimeStr;
 	}
-	
+
+	public String getRepairIds() {
+		return repairIds;
+	}
+
+	public void setRepairIds(String repairIds) {
+		this.repairIds = repairIds;
+	}
+
+	@Override
+	public String toString() {
+		return "OutStockVo{" +
+				"repairItemId=" + repairItemId +
+				", repairId=" + repairId +
+				", stockId=" + stockId +
+				", stockNo='" + stockNo + '\'' +
+				", stockName='" + stockName + '\'' +
+				", companyId='" + companyId + '\'' +
+				", userdStockQuantity=" + userdStockQuantity +
+				", stockQuantity=" + stockQuantity +
+				", workHourCost=" + workHourCost +
+				", stockIncomePrice=" + stockIncomePrice +
+				", stockCost=" + stockCost +
+				", itemPrice=" + itemPrice +
+				", itemQuantity=" + itemQuantity +
+				", itemSum=" + itemSum +
+				", cost=" + cost +
+				", profit=" + profit +
+				", repairCount=" + repairCount +
+				", carId=" + carId +
+				", carType='" + carType + '\'' +
+				", license_plate_num='" + license_plate_num + '\'' +
+				", supplier='" + supplier + '\'' +
+				", supplierTel='" + supplierTel + '\'' +
+				", incomingTime=" + incomingTime +
+				", createTime=" + createTime +
+				", startTime=" + startTime +
+				", endTime=" + endTime +
+				", stockCount=" + stockCount +
+				", incomingTimeStr='" + incomingTimeStr + '\'' +
+				", repairIds='" + repairIds + '\'' +
+				'}';
+	}
 }

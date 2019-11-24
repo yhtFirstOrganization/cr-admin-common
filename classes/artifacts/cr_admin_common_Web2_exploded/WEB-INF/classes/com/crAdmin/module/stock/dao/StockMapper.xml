@@ -48,6 +48,7 @@
 		<result column="supplier_tel" property="supplierTel" jdbcType="VARCHAR" />
 		<result column="income_time" property="incomingTime" jdbcType="TIMESTAMP" />
 		<result column="incomingTimeStr" property="incomingTimeStr" jdbcType="VARCHAR" />
+		<result column="repair_ids" property="repairIds" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -103,7 +104,8 @@
 		count(b.id) repairCount,
 		sum(a.stock_price_income*b.item_quantity) cost,
 		sum(b.item_quantity *
-		a.stock_price) price
+		a.stock_price) price,
+		group_concat(DISTINCT c.id order by c.id ASC) repair_ids
 		FROM tb_stock
 		a,tb_repair_item
 		b,tb_repair
