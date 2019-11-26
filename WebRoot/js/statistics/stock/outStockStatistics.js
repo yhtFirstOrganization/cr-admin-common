@@ -159,13 +159,6 @@ function initStatisticsData() {
 										return tdHtml;
 									}
 								},
-                                {
-                                    // 隐藏维修ID列
-                                    targets : 1,
-                                    render : function(data, type, row, meta) {
-                                        return "<td class=\"repairIds\" style=\"display:none;\">" + data + "</td>";
-                                    }
-                                },
 								// {"visible": false, "targets": [ 1 ]},//
 								// 控制列的隐藏显示
 								{
