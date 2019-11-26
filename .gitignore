@@ -26,3 +26,4 @@ src/main/webapp/META-INF/
 */src/main/webapp/WEB-INF/decorators/revision.properties
 target
 /bin
+classes

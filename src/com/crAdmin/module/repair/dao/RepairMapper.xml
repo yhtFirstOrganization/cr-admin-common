@@ -267,6 +267,7 @@
 		where id = #{repairId,jdbcType=INTEGER}
 	</update>
 
+	<!-- 根据维修记录的主键ID获取维修记录信息 -->
 	<select id="queryRepairListByIds" resultMap="BaseResultMap" parameterType="com.crAdmin.bean.Repair">
 		select
 		<include refid="Base_Column_List" />
