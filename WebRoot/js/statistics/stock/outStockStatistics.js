@@ -44,7 +44,7 @@ $("tbody").on(
 		'click',
 		'a.track',
 		function() {
-			var carId = $($(this).parents('tr').find("td")[2]).text(); // 通过dom节点
+			var repairIds = $($(this).parents('tr').find("td")[10]).text();
 			// $.session.set('carid', carid);
 			var aobject = window.parent.parent.document
 					.getElementById("repairListId");
@@ -53,9 +53,8 @@ $("tbody").on(
 			// 修改值
 			$(aobject).attr(
 					"_href",
-					_hrefVal + "?carid=" + carId + "&startTime=" + startTime
-							+ "&emdTime=" + endTime);
-			$(aobject).html("维修记录");
+                    _hrefVal + "?repairIds=" + repairIds);
+			$(aobject).html("维修记录列表");
 			window.parent.parent.document.getElementById("repairListId")
 					.click();
 			// 恢复原值
@@ -83,7 +82,7 @@ function initStatisticsData() {
 			'dblclick',
 			'tr',
 			function() {
-				var carid = $(this).find("td").eq(2).html();
+                var repairIds = $(this).find("td").eq(10).html();
 				// $.session.set('carid', carid);
 				var aobject = window.parent.parent.document
 						.getElementById("repairListId");
@@ -92,9 +91,8 @@ function initStatisticsData() {
 				// 修改值
 				$(aobject).attr(
 						"_href",
-						_hrefVal + "?carid=" + carid + "&startTime="
-								+ startTime + "&emdTime=" + endTime);
-				$(aobject).html("维修记录");
+						_hrefVal + "?repairIds=" + repairIds);
+				$(aobject).html("维修记录列表");
 				window.parent.parent.document.getElementById("repairListId")
 						.click();
 				// 恢复原值
@@ -134,6 +132,8 @@ function initStatisticsData() {
 							"data" : "workHourCost"
 						}, {
 							"data" : "itemSum"
+						}, {
+							"data" : "repairIds"
 						}, {
 							"data" : null
 						}
@@ -195,10 +195,12 @@ function initStatisticsData() {
 						"initComplete" : function(settings, json) {// table初始化后触发
 							$("table tr").find("td:eq(1),th:eq(1)").hide();// 设置第一列隐藏
 							$("table tr").find("td:eq(2),th:eq(2)").hide();// 设置第一列隐藏
+							$("table tr").find("td:eq(10),th:eq(10)").hide();// 设置第10列隐藏
 						},
 						"drawCallback" : function(settings) {
 							$("table tr").find("td:eq(1)").hide();// 设置第一列隐藏
 							$("table tr").find("td:eq(2)").hide();// 设置第一列隐藏
+							$("table tr").find("td:eq(10)").hide();// 设置第10列隐藏
 							// $("table tr").find("td:eq(4),th:eq(4)").hide();
 
 						},

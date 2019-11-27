@@ -26,4 +26,5 @@ public interface RepairMapper {
 	
 	public Repair queryRepairInfo(Repair repair);
 
+	public List<Repair> queryRepairListByIds(List<Integer> idList);
 }

@@ -53,6 +53,7 @@ function initPage(repairId) {
 	var perCarId = $("#perCarId").html();
 	var startTime = $("#startTime").val();
 	var endTime = $("#endTime").val();
+	var repairIds = $("#repairIds").val();
 	if (startTime && endTime) {
 		if (startTime > endTime) {
 			alert("结束时间不能早于开始时间。");
@@ -65,7 +66,8 @@ function initPage(repairId) {
 		data : {
 			"startTime" : startTime,
 			"endTime" : endTime,
-			"carid" : perCarId
+			"carid" : perCarId,
+            "repairIds" : repairIds
 		},
 		success : function(data) {
 			drawingListData(data);

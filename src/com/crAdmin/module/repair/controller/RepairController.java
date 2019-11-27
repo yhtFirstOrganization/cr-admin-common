@@ -1,29 +1,5 @@
 package com.crAdmin.module.repair.controller;
 
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.crAdmin.bean.Car;
 import com.crAdmin.bean.Message;
 import com.crAdmin.bean.Repair;
@@ -37,6 +13,28 @@ import com.crAdmin.util.NumGenerator;
 import com.crAdmin.util.Util;
 import com.crAdmin.util.annotation.LogAnnotation;
 import com.crAdmin.util.annotation.OptionType;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 维修记录相关controller
@@ -72,7 +70,7 @@ public class RepairController extends BaseController {
 	@RequestMapping("/toRepairList.do")
 	// @LogAnnotation(option = "查询维修记录列表信息", optionType = OptionType.query)
 	public ModelAndView toRepairList(Integer carid, Integer repairId,
-			String startTime, String endTime) {
+			String startTime, String endTime, String repairIds) {
 		ModelAndView mv = new ModelAndView("repair/repairList.ftl");
 		if (StringUtils.isNotBlank(startTime)) {
 			mv.addObject("startTime", startTime);
@@ -83,6 +81,11 @@ public class RepairController extends BaseController {
 			mv.addObject("endTime", endTime);
 		} else {
 			mv.addObject("endTime", "");
+		}
+		if (StringUtils.isNotBlank(repairIds)) {
+			mv.addObject("repairIds", repairIds);
+		} else {
+			mv.addObject("repairIds", "");
 		}
 
 		// Integer carid = (Integer)session.getValue("carid");
@@ -456,7 +459,13 @@ public class RepairController extends BaseController {
 	@ResponseBody
 	// @LogAnnotation(option = "查询维修记录和项目信息", optionType = OptionType.query)
 	public List<Repair> queryRepairList(Integer carid, String startTime,
-			String endTime, HttpSession session) throws ParseException {
+			String endTime, HttpSession session, String repairIds) throws ParseException {
+		//如果根据ID能查到维修记录，则直接返回结果
+		List<Repair> repairListByIds = repairService.queryRepairListByIds(repairIds);
+		if (CollectionUtils.isNotEmpty(repairListByIds)) {
+			return repairListByIds;
+		}
+
 		// Integer carid = (Integer) session.getAttribute("carId");
 		// 查询汽车基本信息
 		Repair repair = new Repair();
