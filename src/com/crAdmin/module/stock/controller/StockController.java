@@ -476,7 +476,7 @@ public class StockController extends BaseController {
 		model.addAttribute("startTime", startTime);
 		model.addAttribute("endTime", endTime);
 		model.addAttribute("dateType", dateType == null ? "" : dateType);
-		return "statistics/stock/outStock.ftl";
+		return "statistics/stock/OutStock.ftl";
 	}
 
 	/**
