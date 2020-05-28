@@ -107,6 +107,16 @@ function exportRepairInfo(_this, event) {
 	});
 	event.stopPropagation();
 }
+// 打印维修详情
+function printRepairInfo(_this, event) {
+	// 获取维修id
+	var li = $(_this).closest("li");
+	var repairid = li.attr("repairid");
+    layer_show_full('打印维修记录单',
+        '/cr-admin/repair/toRepairItem.do?repairId=' + repairid,
+        '', '');
+	event.stopPropagation();
+}
 // 描绘列表
 function drawingListData(data) {
 	$("#repairListUl").html("");
@@ -178,6 +188,8 @@ function drawingListData(data) {
 												+ "<span class=\"label label-success radius\" style=\"float:right;\" onclick=\"viewPerCar(this,event);\">查车</span>"
 												+ "<span style=\"float:right\">&nbsp;&nbsp;</span>"
 												+ "<span class=\"label label-primary radius\" style=\"float:right;\" onclick=\"exportRepairInfo(this,event);\">导出</span>"
+												+ "<span style=\"float:right\">&nbsp;&nbsp;</span>"
+												+ "<span class=\"label label-primary radius\" style=\"float:right;\" onclick=\"printRepairInfo(this,event);\">打印</span>"
 												+ "<span style=\"float:right\">&nbsp;&nbsp;</span>"
 												+ "<span class=\"label label-warning radius\" style=\"float:right;\" onclick=\"repair_delete_refresh(this);\">删除</span>"
 												+ "<span style=\"float:right\">&nbsp;&nbsp;</span>"
