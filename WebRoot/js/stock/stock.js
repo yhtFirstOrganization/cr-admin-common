@@ -1,5 +1,6 @@
 ﻿var table1, table2, table3, table4, table5, table6, tableId, stockTable;
 var currentTable;
+var lovParaCache=[];
 
 // 新增库存信息
 $("#addStock").bind(
@@ -485,20 +486,26 @@ function lovChoose(tr) {
 	var stockQuantity = 1;
 	var stockUnit = $($(tr).find("td")[7]).text();
 	var workHoursCost = $($(tr).find("td")[8]).text();
-	var lovPara = "{\"stockId\":\"" + stockId + "\",\"stockNo\":\"" + stockNo
+	var oneStock = "{\"stockId\":\"" + stockId + "\",\"stockNo\":\"" + stockNo
 			+ "\",\"stockDes\":\"" + stockDes + "\",\"stockQuantity\":\""
 			+ stockQuantity + "\",\"stockUnit\":\"" + stockUnit
 			+ "\",\"workHoursCost\":\"" + workHoursCost
 			+ "\",\"stockPriceIncome\":\"" + stockPriceIncome
 			+ "\",\"stockPrice\":\"" + stockPrice + "\"}";
-	localStorage.setItem("lovPara", lovPara);
-	var index = parent.layer.getFrameIndex(window.name);
-	parent.layer.close(index);
+    lovParaCache.push(oneStock);
+    $("#chooseCount").html(parseInt($("#chooseCount").html()) + 1);
 }
 
+function completeLovChoose() {
+    localStorage.setItem("lovPara", lovParaCache.join("_"));
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.close(index);
+}
 // 双击
 function trDbClickAction() {
 	$('.table-sort tbody').on('dblclick', 'tr', function() {
+        lovParaCache = [];
 		lovChoose(this);
+        completeLovChoose();
 	});
 }

@@ -199,56 +199,63 @@ $("#addRow")
 							'',
 							'false',
 							function() {
-								var lovPara = localStorage.getItem("lovPara");
-								localStorage.setItem("lovPara", "{}");
-								if (!lovPara) {
-									lovPara = "{}";
+								var lovParaListStr = localStorage.getItem("lovPara");
+								localStorage.setItem("lovPara", "");
+								if (!lovParaListStr) {
+                                    lovParaListStr = "";
 								}
-								lovPara = JSON.parse(lovPara);
-								if (!lovPara || !lovPara.stockId) {
+                                var lovParaList = lovParaListStr.split("_");
+                                if (!lovParaList || lovParaList.length == 0) {
 									return;
 								}
-								var tr = $("<tr class=\"text-c\"></tr>")
-										.append(
-												"<td id=\"orderNum\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"itemDes\" value=\""
-														+ lovPara.stockDes
-														+ "\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"replaceReason\" maxlength=\"150\" value=\""
-														+ lovPara.stockNo
-														+ "\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"itemUnit\" maxlength=\"10\" value=\""
-														+ lovPara.stockUnit
-														+ "\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"itemQuantity\" maxlength=\"10\" onKeyUp=\"amount(this)\" value=\""
-														+ lovPara.stockQuantity
-														+ "\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"itemPrice\" maxlength=\"10\" onKeyUp=\"amount(this)\" value=\""
-														+ lovPara.stockPrice
-														+ "\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"workHoursCost\" maxlength=\"10\" onKeyUp=\"amount(this)\" value=\""
-														+ lovPara.workHoursCost
-														+ "\"></td>"
-														+ "<td><input type=\"text\" class=\"input-text\" id=\"itemSum\" disabled></td>"
-														+ "<td class=\"hide\"><input type=\"text\" class=\"input-text\" id=\"stockId\" disabled></td>"
-														+ "<td class=\"hide\"><input type=\"text\" class=\"input-text\" id=\"stockPriceIncome\" disabled value=\""
-														+ lovPara.stockPriceIncome
-														+ "\"></td>"
-														+ "<td class=\"td-manage\"><a title=\"删除\" href=\"javascript:;\" id=\"delete\" class=\"delete\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe631;</i></a></td>");
-								editTable.row.add(tr).draw();
-								if (lovPara.stockNo) {// 选择库存
-									// 编号不可改
-									var tr = $('#repairItemTable tr:last');
-									tr.find('td').eq(3).find("input").attr(
-											"disabled", "disabled");
-									//名称可改，应付假库存情况
-									// tr.find('td').eq(1).find("input").attr(
-									// "disabled", "disabled");
-									// 记录id
-									tr.data("stockId", lovPara.stockId);
-									// 计算应收总额
-									jisuanjine(tr.find('td').eq(1));
-								}
+                                for (var i = 0; i < lovParaList.length; i++) {
+                                    var lovPara = JSON.parse(lovParaList[i]);
+
+                                    var tr = $("<tr class=\"text-c\"></tr>")
+                                        .append(
+                                            "<td id=\"orderNum\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"itemDes\" value=\""
+                                            + lovPara.stockDes
+                                            + "\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"replaceReason\" maxlength=\"150\" value=\""
+                                            + lovPara.stockNo
+                                            + "\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"itemUnit\" maxlength=\"10\" value=\""
+                                            + lovPara.stockUnit
+                                            + "\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"itemQuantity\" maxlength=\"10\" onKeyUp=\"amount(this)\" value=\""
+                                            + lovPara.stockQuantity
+                                            + "\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"itemPrice\" maxlength=\"10\" onKeyUp=\"amount(this)\" value=\""
+                                            + lovPara.stockPrice
+                                            + "\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"workHoursCost\" maxlength=\"10\" onKeyUp=\"amount(this)\" value=\""
+                                            + lovPara.workHoursCost
+                                            + "\"></td>"
+                                            + "<td><input type=\"text\" class=\"input-text\" id=\"itemSum\" disabled></td>"
+                                            + "<td class=\"hide\"><input type=\"text\" class=\"input-text\" id=\"stockId\" disabled></td>"
+                                            + "<td class=\"hide\"><input type=\"text\" class=\"input-text\" id=\"stockPriceIncome\" disabled value=\""
+                                            + lovPara.stockPriceIncome
+                                            + "\"></td>"
+                                            + "<td class=\"td-manage\"><a title=\"删除\" href=\"javascript:;\" id=\"delete\" class=\"delete\" style=\"text-decoration:none\"><i class=\"Hui-iconfont\">&#xe631;</i></a></td>");
+                                    editTable.row.add(tr).draw();
+                                    if (lovPara.stockNo) {// 选择库存
+                                        // 编号不可改
+                                        var tr = $('#repairItemTable tr:last');
+                                        tr.find('td').eq(3).find("input").attr(
+                                            "disabled", "disabled");
+                                        //名称可改，应付假库存情况
+                                        // tr.find('td').eq(1).find("input").attr(
+                                        // "disabled", "disabled");
+                                        // 记录id
+                                        tr.data("stockId", lovPara.stockId);
+                                        // 计算应收总额
+                                        jisuanjine(tr.find('td').eq(1));
+                                    }
+                                }
+                                // 计算应收总额
+                                itemSumOnchange();
+
 								editTable.on('order.dt search.dt', function() {
 									editTable.column(0, {
 										search : 'applied',
@@ -293,12 +300,16 @@ $("#repairItemTable tbody").on("click", "#delete", function() {
 			cell.innerHTML = i + 1;
 		});
 	}).draw();
+    // 计算应收总额
+    itemSumOnchange();
 });
 
 // 计算项目总额
 $("#repairItemTable tbody").on("blur",
 		"#itemQuantity,#itemPrice, #workHoursCost", function() {
-			jisuanjine(this);
+        jisuanjine(this);
+        // 计算应收总额
+        itemSumOnchange();
 		});
 
 function jisuanjine(_this) {
@@ -314,8 +325,7 @@ function jisuanjine(_this) {
 	var itemSum = (itemPrice * itemQuantity + workHoursCost).toFixed(2);
 
 	$(_this).parents("tr").find("#itemSum").val(itemSum);
-	// 计算应收总额
-	itemSumOnchange();
+
 }
 
 /*
@@ -381,7 +391,7 @@ function layer_show_refresh_click(title, url, w, h, isFull, callback) {
 	}
 	;
 	if (h == null || h == '') {
-		h = ($(window).height() - 50);
+		h = ($(window).height() - 20);
 	}
 	;
 	if (isFull == 'true') {

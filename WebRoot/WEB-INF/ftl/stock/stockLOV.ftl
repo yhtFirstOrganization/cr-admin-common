@@ -17,7 +17,14 @@
 <div class="pd-5">
 	<div class="HuiTab mt-5">
 		<!--选项卡tab-->
-		
+        <div style="float: right;">
+            <div style="float: left;">已选择</div>
+            <div style="float: left;color: red;" id="chooseCount">0</div>
+            <div style="float: left;">项</div>
+            <button class="btn btn-secondary radius" id="submitBtn" style="height: 25px;" onclick="completeLovChoose()">
+                完成选择
+            </button>
+        </div>
 		<!--选项内容-->
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -53,6 +60,8 @@
 	});
 	function initData(){
 		var isLOV = true;
+		// 清空缓存
+        lovParaCache = [];
 		datatablefunc(isLOV);
 	}
 
