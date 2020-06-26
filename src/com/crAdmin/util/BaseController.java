@@ -2,7 +2,7 @@ package com.crAdmin.util;
 
 public class BaseController {
 	/*
-	 * 错误代码1
+	 * 错误代码
 	 */
 	public static final String errorCode = "1111";
 	/*
