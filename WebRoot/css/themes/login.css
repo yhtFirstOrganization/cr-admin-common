@@ -1,0 +1,86 @@
+@charset "utf-8";
+/* CSS Document */
+html,body,#container {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: "微软雅黑";
+	font-size: 12px;
+	background-image: url(images/bg.jpg);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-color: #646dbb;
+	color: #0952A1
+}
+
+.container {
+	height: auto;
+	min-height: 100%;
+}
+
+.content {
+	
+}
+
+.denglu {
+	width: 834px;
+	height: 452px;
+	margin: -220px 0 0 -417px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	background-image: url(images/di01.png);
+	background-repeat: no-repeat
+}
+
+.shurukuang {
+	margin-top: 200px;
+	padding-left: 500px;
+	font-size: 14px;
+	color: #787878
+}
+
+.queding {
+	height: 32px;
+	background-image: url(images/btn.png);
+	width: 100px;
+	display: inline-block;
+	text-align: center;
+	color: #FFFFFF;
+	font-size: 16px;
+	background: darkseagreen;
+	float: right;
+}
+
+
+.shuru01 {
+	background: #FFF;
+	border: solid 1px #B5B5B5;
+	height: 28px;
+	line-height: 28px;
+	width: 240px;
+	background-image: url(images/user.jpg);
+	background-repeat: no-repeat;
+	background-position: left;
+	background-position: 10px 7px;
+	padding-left: 30px
+}
+
+.shuru02 {
+	background: #FFF;
+	border: solid 1px #B5B5B5;
+	height: 28px;
+	line-height: 28px;
+	width: 240px;
+	background-image: url(images/key.jpg);
+	background-repeat: no-repeat;
+	background-position: left;
+	background-position: 10px 7px;
+	padding-left: 30px
+}
+
+.banben {
+	text-align: center;
+	font-size: 14px;
+	color: #FFFFFF;
+}
