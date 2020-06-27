@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crAdmin.module.stockIncome.dao.StockIncomeMapper" >
+  <resultMap id="BaseResultMap" type="com.crAdmin.bean.StockIncome" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="stock_id" property="stockId" jdbcType="INTEGER" />
+    <result column="income_stock_quantity" property="incomeStockQuantity" jdbcType="DECIMAL" />
+    <result column="income_time" property="incomeTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="isdelete" property="isdelete" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, stock_id, income_stock_quantity, income_time, update_time, isdelete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_stock_income
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_stock_income
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  	<delete id="delStockIncomeInfo" parameterType="java.lang.Integer">
+		update tb_stock_income
+		set
+		isdelete = '1'
+		where stock_id = #{stockId,jdbcType=INTEGER}
+	</delete>
+	
+  <insert id="insert" parameterType="com.crAdmin.bean.StockIncome" >
+    insert into tb_stock_income (id, stock_id, income_stock_quantity, 
+      income_time, update_time, isdelete
+      )
+    values (#{id,jdbcType=INTEGER}, #{stockId,jdbcType=INTEGER}, #{incomeStockQuantity,jdbcType=DECIMAL}, 
+      #{incomeTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isdelete,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crAdmin.bean.StockIncome" >
+    insert into tb_stock_income
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="stockId != null" >
+        stock_id,
+      </if>
+      <if test="incomeStockQuantity != null" >
+        income_stock_quantity,
+      </if>
+      <if test="incomeTime != null" >
+        income_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="supplier != null" >
+        supplier,
+      </if>
+      <if test="supplierTel != null" >
+        supplier_tel,
+      </if>
+      <if test="isdelete != null" >
+        isdelete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stockId != null" >
+        #{stockId,jdbcType=VARCHAR},
+      </if>
+      <if test="incomeStockQuantity != null" >
+        #{incomeStockQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeTime != null" >
+        #{incomeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="supplier != null" >
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierTel != null" >
+        #{supplierTel,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null" >
+        #{isdelete,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crAdmin.bean.StockIncome" >
+    update tb_stock_income
+    <set >
+      <if test="stockId != null" >
+        stock_id = #{stockId,jdbcType=VARCHAR},
+      </if>
+      <if test="incomeStockQuantity != null" >
+        income_stock_quantity = #{incomeStockQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeTime != null" >
+        income_time = #{incomeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null" >
+        isdelete = #{isdelete,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crAdmin.bean.StockIncome" >
+    update tb_stock_income
+    set stock_id = #{stockId,jdbcType=VARCHAR},
+      income_stock_quantity = #{incomeStockQuantity,jdbcType=DECIMAL},
+      income_time = #{incomeTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      isdelete = #{isdelete,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
